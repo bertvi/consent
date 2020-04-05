@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  db:
+    image: postgres
+    restart: always
+    build:
+      context: ./docker
+      dockerfile: Dockerfile
+    ports:
+      - 15434:5432
+    environment:
+      - POSTGRES_USER=declaration_api
+      - POSTGRES_PASSWORD=declaration_api

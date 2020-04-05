@@ -17,3 +17,32 @@ The API provides three endpoints:
 * /api/listServiceDeclarations - endpoint for listing all service declarations
 * /api/addServiceDeclaration - endpoint for adding a new service declaration
 * /api/updateServiceDeclarationValidUntil - endpoint for updating a service declaration
+
+Install database with Docker
+-----
+1. install docker support for your OS
+2. for start
+       
+       docker-compose build
+       docker-compose up
+
+3. for remove all images
+       
+       docker-compose rm
+       
+4. for remove all images and volumes - needed if want to recreate database content for example
+       
+       docker-compose rm -v
+       
+4. for reinitialize DB clean data
+
+       docker-compose rm postgres
+       docker-compose up
+
+DB
+--
+* host: localhost
+* port: 15434
+* db: consent
+  * user: declaration_api
+  * password: declaration_api
