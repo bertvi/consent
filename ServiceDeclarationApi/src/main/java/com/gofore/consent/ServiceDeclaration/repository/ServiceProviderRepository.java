@@ -12,4 +12,7 @@ public interface ServiceProviderRepository extends JpaRepository<ServiceProvider
     @Query(value = "SELECT * FROM service_declaration_api.service_provider WHERE identifier = ?1", nativeQuery = true)
     ServiceProvider findByIdentifier(@Param("identifier") String identifier);
 
+    @Query(value = "SELECT 1", nativeQuery = true)
+    Integer checkConnection();
+
 }

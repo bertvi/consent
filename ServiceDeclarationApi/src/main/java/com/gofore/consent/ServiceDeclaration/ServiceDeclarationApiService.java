@@ -26,6 +26,10 @@ public class ServiceDeclarationApiService {
         return serviceProviderRepository.findByIdentifier(identifier);
     }
 
+    public boolean checkDatabaseConnection() {
+        return Integer.valueOf(1).equals(serviceProviderRepository.checkConnection());
+    }
+
     public List<ServiceDeclaration> findDeclarations(ListServiceDeclarationRequest request) throws InvalidRequestException, TooBroadQueryException {
         List<ServiceDeclaration> declarations;
         ServiceProvider provider;
