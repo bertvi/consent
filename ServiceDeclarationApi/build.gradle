@@ -26,8 +26,6 @@ dependencies {
 
 	compile(group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2')
 	compile(group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.2.32')
-
-	compile("org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE") { force = true }
 }
 
 test {

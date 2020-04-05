@@ -1,6 +1,8 @@
 package com.gofore.consent.ServiceDeclaration;
 
+import com.gofore.consent.ServiceDeclaration.exception.DuplicateDeclarationException;
 import com.gofore.consent.ServiceDeclaration.exception.InvalidRequestException;
+import com.gofore.consent.ServiceDeclaration.exception.TooBroadQueryException;
 import com.gofore.consent.ServiceDeclaration.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -75,7 +77,7 @@ class ServiceDeclarationControllerTests {
     }
 
     @Test
-    public void testListServiceDeclarationsException() throws Exception {
+    public void testListServiceDeclarationsInvalidRequestException() throws Exception {
         given(serviceDeclarationApiService.findDeclarations(any())).willThrow(InvalidRequestException.class);
 
         String bodyContent = ("{ \"serviceProviderIdentifier\": \"Test provider\", " +
@@ -93,9 +95,36 @@ class ServiceDeclarationControllerTests {
 
         String content = mvcResult.getResponse().getContentAsString();
         int status = mvcResult.getResponse().getStatus();
+        String expectedMessage = "{\"message\":\"Invalid request\",\"details\":[null]}";
 
         assertEquals(400, status);
-        assertEquals("", content);
+        assertEquals(expectedMessage, content);
+        verify(serviceDeclarationApiService, times(1)).findDeclarations(any());
+    }
+
+    @Test
+    public void testListServiceDeclarationsTooBroadQueryException() throws Exception {
+        given(serviceDeclarationApiService.findDeclarations(any())).willThrow(TooBroadQueryException.class);
+
+        String bodyContent = ("{ \"serviceProviderIdentifier\": \"Test provider\", " +
+                "\"serviceDeclarationIdentifier\": \"TestDeclaration\", " +
+                "\"name\": \"Test 1\", " +
+                "\"description\": \"Test description\", " +
+                "\"technicalDescription\": \"Openapi 3.0.0\", " +
+                "\"validAt\": \"2020-04-23T18:25:43.511Z\", " +
+                "\"details\": \"true\"}");
+
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/listServiceDeclarations")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(bodyContent)).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        int status = mvcResult.getResponse().getStatus();
+        String expectedMessage = "{\"message\":\"Too broad query\",\"details\":[null]}";
+
+        assertEquals(400, status);
+        assertEquals(expectedMessage, content);
         verify(serviceDeclarationApiService, times(1)).findDeclarations(any());
     }
 
@@ -147,7 +176,7 @@ class ServiceDeclarationControllerTests {
     }
 
     @Test
-    public void testAddServiceDeclarationException() throws Exception {
+    public void testAddServiceDeclarationInvalidRequestException() throws Exception {
         given(serviceDeclarationApiService.save(any())).willThrow(InvalidRequestException.class);
 
         String bodyContent = ("{ \"serviceProviderIdentifier\": \"TestProvider\", " +
@@ -167,9 +196,39 @@ class ServiceDeclarationControllerTests {
 
         String content = mvcResult.getResponse().getContentAsString();
         int status = mvcResult.getResponse().getStatus();
+        String expectedMessage = "{\"message\":\"Invalid request\",\"details\":[null]}";
 
         assertEquals(400, status);
-        assertEquals("", content);
+        assertEquals(expectedMessage, content);
+        verify(serviceDeclarationApiService, times(1)).save(any());
+
+    }
+
+    @Test
+    public void testAddServiceDeclarationDuplicateDeclarationException() throws Exception {
+        given(serviceDeclarationApiService.save(any())).willThrow(DuplicateDeclarationException.class);
+
+        String bodyContent = ("{ \"serviceProviderIdentifier\": \"TestProvider\", " +
+                "\"serviceDeclarationIdentifier\": \"TestDeclaration\", " +
+                "\"serviceDeclarationName\": \"Test name\", " +
+                "\"serviceDeclarationDescription\": \"Test description\", " +
+                "\"technicalDescription\": \"Openapi 3.0.0\", " +
+                "\"validUntil\": \"2022-04-23T18:25:43.511Z\", " +
+                "\"consentMaxDurationSeconds\": \"60\", " +
+                "\"maxCacheSeconds\": \"60\", " +
+                "\"needSignature\": \"false\"}");
+
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/addServiceDeclaration")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(bodyContent)).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+        int status = mvcResult.getResponse().getStatus();
+        String expectedMessage = "{\"message\":\"Duplicate declaration\",\"details\":[null]}";
+
+        assertEquals(400, status);
+        assertEquals(expectedMessage, content);
         verify(serviceDeclarationApiService, times(1)).save(any());
 
     }
@@ -223,9 +282,10 @@ class ServiceDeclarationControllerTests {
 
         String content = mvcResult.getResponse().getContentAsString();
         int status = mvcResult.getResponse().getStatus();
+        String expectedMessage = "{\"message\":\"Invalid request\",\"details\":[null]}";
 
         assertEquals(400, status);
-        assertEquals("", content);
+        assertEquals(expectedMessage, content);
         verify(serviceDeclarationApiService, times(1)).update(any());
     }
 
