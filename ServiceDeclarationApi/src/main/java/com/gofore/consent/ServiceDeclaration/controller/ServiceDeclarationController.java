@@ -17,7 +17,7 @@ import java.util.List;
 
 @Api(description = "Service declaration related services", value = "/api")
 @RestController
-@RequestMapping(value = "/api", produces = "application/json")
+@RequestMapping("/api")
 public class ServiceDeclarationController {
 
     private static final String LIST_DECLARATIONS_EXAMPLE = ("{ \"serviceProviderIdentifier\": \"Test provider\", " +
