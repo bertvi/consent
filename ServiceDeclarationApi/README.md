@@ -46,3 +46,12 @@ DB
 * db: consent
   * user: declaration_api
   * password: declaration_api
+  
+Run the api
+--
+- ./gradlew bootRun
+
+
+Test the api
+--
+- Open url http://localhost:8982/swagger-ui.html in the browser
