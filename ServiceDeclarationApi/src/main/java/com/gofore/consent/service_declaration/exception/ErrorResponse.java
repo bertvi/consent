@@ -1,9 +1,14 @@
 package com.gofore.consent.service_declaration.exception;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "error")
+@Getter
+@Setter
 public class ErrorResponse
 {
     public ErrorResponse(String message, List<String> details) {
@@ -12,23 +17,7 @@ public class ErrorResponse
         this.details = details;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     private String message;
-
-    public List<String> getDetails() {
-        return details;
-    }
-
-    public void setDetails(List<String> details) {
-        this.details = details;
-    }
 
     private List<String> details;
 

@@ -42,7 +42,7 @@ public class ServiceDeclarationApiService {
     public List<ServiceDeclaration> findDeclarations(ListServiceDeclarationRequest request) throws InvalidRequestException, TooBroadQueryException {
         List<ServiceDeclaration> declarations;
 
-        log.info("Attempting to find declarations with request {}", request.toString());
+        log.info("Attempting to find declarations with request {}", request);
 
         boolean tooBroadQuery = request.getDescription().isEmpty()
                 && request.getTechnicalDescription().isEmpty()
@@ -61,7 +61,7 @@ public class ServiceDeclarationApiService {
             throw new InvalidRequestException("The provider with identifier " + request.getServiceProviderIdentifier() + " does not exist");
         }
 
-        log.info("Found following declarations: {}", declarations.toString());
+        log.info("Found following declarations: {}", declarations);
 
         return declarations;
     }
@@ -69,12 +69,11 @@ public class ServiceDeclarationApiService {
     public ServiceDeclaration save(AddServiceDeclarationRequest request) throws DuplicateDeclarationException, InvalidRequestException {
         ServiceProvider provider;
 
-        log.info("Attempting to save declaration with request {}", request.toString());
+        log.info("Attempting to save declaration with request {}", request);
 
         Optional<ServiceProvider> foundProvider =findProviderByIdentifier(request.getServiceProviderIdentifier());
         if (!foundProvider.isPresent()) {
-            ServiceProvider newProvider = new ServiceProvider();
-            newProvider.setIdentifier(request.getServiceProviderIdentifier());
+            ServiceProvider newProvider = ServiceProvider.builder().identifier(request.getServiceProviderIdentifier()).build();
             provider = serviceProviderRepository.save(newProvider);
         } else {
             provider = foundProvider.get();
@@ -97,20 +96,20 @@ public class ServiceDeclarationApiService {
             throw new InvalidRequestException("MaxCacheSeconds of service declaration must be positive");
         }
 
-        ServiceDeclaration declaration = new ServiceDeclaration();
-        declaration.setIdentifier(request.getServiceDeclarationIdentifier());
-        declaration.setName(request.getServiceDeclarationName());
-        declaration.setDescription(request.getServiceDeclarationDescription());
-        declaration.setValid(Boolean.TRUE);
-        declaration.setProvider(provider);
+        ServiceDeclaration declaration = ServiceDeclaration.builder()
+                .identifier(request.getServiceDeclarationIdentifier())
+                .name(request.getServiceDeclarationName())
+                .description(request.getServiceDeclarationDescription())
+                .valid(Boolean.TRUE)
+                .provider(provider).build();
 
-        log.info("Saving declaration {} to db", declaration.toString());
+        log.info("Saving declaration {} to db", declaration);
 
         return serviceDeclarationRepository.save(declaration);
     }
 
     public ServiceDeclaration update(UpdateServiceDeclarationRequest request) throws InvalidRequestException {
-        log.info("Attempting to update declaration with request {}", request.toString());
+        log.info("Attempting to update declaration with request {}", request);
 
         Optional<ServiceDeclaration> foundDeclaration = findDeclarationByIdentifier(request.getServiceDeclarationIdentifier());
         if (!foundDeclaration.isPresent()) {
@@ -125,7 +124,7 @@ public class ServiceDeclarationApiService {
         ServiceDeclaration declaration = serviceDeclarationRepository.findByIdentifier(request.getServiceDeclarationIdentifier());
         declaration.setValid(Boolean.TRUE);
 
-        log.info("Updating declaration {} in db", declaration.toString());
+        log.info("Updating declaration {} in db", declaration);
 
         return serviceDeclarationRepository.save(declaration);
     }

@@ -1,42 +1,25 @@
 package com.gofore.consent.service_declaration.model;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.util.List;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class ListServiceDeclarationResponse implements Serializable {
 
     private static final long serialVersionUID = 4049961576368846345L;
 
-    public List<ServiceDeclaration> getDeclarations() {
-        return declarations;
-    }
-
-    public void setDeclarations(List<ServiceDeclaration> declarations) {
-        this.declarations = declarations;
-    }
-
+    @Getter @Setter
     private List<ServiceDeclaration> declarations;
 
-
-    public String getServiceProviderIdentifier() {
-        return serviceProviderIdentifier;
-    }
-
-    public void setServiceProviderIdentifier(String serviceProviderIdentifier) {
-        this.serviceProviderIdentifier = serviceProviderIdentifier;
-    }
-
+    @Getter @Setter
     private String serviceProviderIdentifier;
 
-
-    public String getServiceDeclarationIdentifier() {
-        return serviceDeclarationIdentifier;
-    }
-
-    public void setServiceDeclarationIdentifier(String serviceDeclarationIdentifier) {
-        this.serviceDeclarationIdentifier = serviceDeclarationIdentifier;
-    }
-
+    @Getter @Setter
     private String serviceDeclarationIdentifier;
 
     @Override

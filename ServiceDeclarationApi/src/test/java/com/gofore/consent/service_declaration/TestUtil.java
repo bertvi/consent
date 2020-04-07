@@ -24,21 +24,16 @@ public class TestUtil {
     }
 
     public ServiceProvider createProvider(String identifier) {
-        ServiceProvider provider = new ServiceProvider();
-        provider.setIdentifier(identifier);
-
-        return provider;
+        return ServiceProvider.builder().identifier(identifier).build();
     }
 
     public ServiceDeclaration createDeclaration(String identifier, String name, String description, Boolean valid, ServiceProvider provider) {
-        ServiceDeclaration declaration = new ServiceDeclaration();
-        declaration.setProvider(provider);
-        declaration.setIdentifier(identifier);
-        declaration.setName(name);
-        declaration.setDescription(description);
-        declaration.setValid(valid);
-
-        return declaration;
+        return ServiceDeclaration.builder()
+                .provider(provider)
+                .identifier(identifier)
+                .name(name)
+                .description(description)
+                .valid(valid).build();
     }
 
     public ListServiceDeclarationRequest createListServiceDeclarationRequest(String description,
@@ -48,15 +43,14 @@ public class TestUtil {
                                                                               String providerIdentifier,
                                                                               String technicalDescription,
                                                                               LocalDateTime validAt) {
-        ListServiceDeclarationRequest request = new ListServiceDeclarationRequest();
-        request.setDescription(description);
-        request.setDetails(details);
-        request.setName(name);
-        request.setServiceDeclarationIdentifier(declarationIdentifier);
-        request.setServiceProviderIdentifier(providerIdentifier);
-        request.setTechnicalDescription(technicalDescription);
-        request.setValidAt(validAt);
-        return request;
+        return ListServiceDeclarationRequest.builder()
+                .description(description)
+                .details(details)
+                .name(name)
+                .serviceDeclarationIdentifier(declarationIdentifier)
+                .serviceProviderIdentifier(providerIdentifier)
+                .technicalDescription(technicalDescription)
+                .validAt(validAt).build();
     }
 
     public AddServiceDeclarationRequest createAddServiceDeclarationRequest(Long consentMaxSeconds,
@@ -67,26 +61,24 @@ public class TestUtil {
                                                                             String declarationIdentifier,
                                                                             String name,
                                                                             String providerIdentifier) {
-        AddServiceDeclarationRequest request = new AddServiceDeclarationRequest();
-        request.setConsentMaxDurationSeconds(consentMaxSeconds);
-        request.setMaxCacheSeconds(cacheMaxSeconds);
-        request.setNeedSignature(needSignature);
-        request.setValidUntil(validUntil);
-        request.setServiceDeclarationDescription(declarationDescription);
-        request.setServiceDeclarationIdentifier(declarationIdentifier);
-        request.setServiceDeclarationName(name);
-        request.setServiceProviderIdentifier(providerIdentifier);
-        return request;
+        return AddServiceDeclarationRequest.builder()
+                .consentMaxDurationSeconds(consentMaxSeconds)
+                .maxCacheSeconds(cacheMaxSeconds)
+                .needSignature(needSignature)
+                .validUntil(validUntil)
+                .serviceDeclarationDescription(declarationDescription)
+                .serviceDeclarationIdentifier(declarationIdentifier)
+                .serviceDeclarationName(name)
+                .serviceProviderIdentifier(providerIdentifier).build();
     }
 
     public UpdateServiceDeclarationRequest createUpdateServiceDeclarationRequest(String declarationIdentifier,
                                                                                   String providerIdentifier,
                                                                                   LocalDateTime validUntil) {
-        UpdateServiceDeclarationRequest request = new UpdateServiceDeclarationRequest();
-        request.setServiceDeclarationIdentifier(declarationIdentifier);
-        request.setServiceProviderIdentifier(providerIdentifier);
-        request.setValidUntil(validUntil);
-        return request;
+        return UpdateServiceDeclarationRequest.builder()
+                .serviceDeclarationIdentifier(declarationIdentifier)
+                .serviceProviderIdentifier(providerIdentifier)
+                .validUntil(validUntil).build();
     }
 
     public <T> T mapFromJson(String json, Class<T> clazz)

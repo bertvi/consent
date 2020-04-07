@@ -52,10 +52,11 @@ public class ServiceDeclarationController {
             @ApiParam(defaultValue = LIST_DECLARATIONS_EXAMPLE, required = true)
             @Valid @RequestBody ListServiceDeclarationRequest request) {
         List<ServiceDeclaration> declarations = serviceDeclarationApiService.findDeclarations(request);
-        ListServiceDeclarationResponse response = new ListServiceDeclarationResponse();
-        response.setServiceDeclarationIdentifier(request.getServiceDeclarationIdentifier());
-        response.setServiceProviderIdentifier(request.getServiceProviderIdentifier());
-        response.setDeclarations(declarations);
+        ListServiceDeclarationResponse response = ListServiceDeclarationResponse.builder()
+                .serviceDeclarationIdentifier(request.getServiceDeclarationIdentifier())
+                .serviceProviderIdentifier(request.getServiceProviderIdentifier())
+                .declarations(declarations).build();
+
         return ResponseEntity.ok(response.toString());
     }
 
@@ -69,8 +70,7 @@ public class ServiceDeclarationController {
             @ApiParam(defaultValue = ADD_DECLARATIONS_EXAMPLE, required = true)
             @Valid @RequestBody AddServiceDeclarationRequest request) {
         serviceDeclarationApiService.save(request);
-        ServiceDeclarationResponse response = new ServiceDeclarationResponse();
-        response.setResponse(RESPONSE_OK);
+        ServiceDeclarationResponse response = ServiceDeclarationResponse.builder().response(RESPONSE_OK).build();
         return ResponseEntity.ok(response.toString());
     }
 
@@ -84,8 +84,7 @@ public class ServiceDeclarationController {
             @ApiParam(defaultValue = UPDATE_DECLARATIONS_EXAMPLE, required = true)
             @Valid @RequestBody UpdateServiceDeclarationRequest request) {
         serviceDeclarationApiService.update(request);
-        ServiceDeclarationResponse response = new ServiceDeclarationResponse();
-        response.setResponse(RESPONSE_OK);
+        ServiceDeclarationResponse response = ServiceDeclarationResponse.builder().response(RESPONSE_OK).build();
         return ResponseEntity.ok(response.toString());
     }
 

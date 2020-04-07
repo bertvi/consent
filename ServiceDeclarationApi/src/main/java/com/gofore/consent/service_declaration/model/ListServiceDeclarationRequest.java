@@ -1,81 +1,37 @@
 package com.gofore.consent.service_declaration.model;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class ListServiceDeclarationRequest implements Serializable {
 
     private static final long serialVersionUID = 4049961366358846345L;
 
-    public String getServiceProviderIdentifier() {
-        return serviceProviderIdentifier;
-    }
-
-    public void setServiceProviderIdentifier(String serviceProviderIdentifier) {
-        this.serviceProviderIdentifier = serviceProviderIdentifier;
-    }
-
-    public String getServiceDeclarationIdentifier() {
-        return serviceDeclarationIdentifier;
-    }
-
-    public void setServiceDeclarationIdentifier(String serviceDeclarationIdentifier) {
-        this.serviceDeclarationIdentifier = serviceDeclarationIdentifier;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getTechnicalDescription() {
-        return technicalDescription;
-    }
-
-    public void setTechnicalDescription(String technicalDescription) {
-        this.technicalDescription = technicalDescription;
-    }
-
-    public LocalDateTime getValidAt() {
-        return validAt;
-    }
-
-    public void setValidAt(LocalDateTime validAt) {
-        this.validAt = validAt;
-    }
-
-    public Boolean getDetails() {
-        return details;
-    }
-
-    public void setDetails(Boolean details) {
-        this.details = details;
-    }
-
+    @Getter @Setter
     private String serviceProviderIdentifier;
 
+    @Getter @Setter
     private String serviceDeclarationIdentifier;
 
+    @Getter @Setter
     private String name;
 
+    @Getter @Setter
     private String description;
 
+    @Getter @Setter
     private String technicalDescription;
 
+    @Getter @Setter
     private LocalDateTime validAt;
 
+    @Getter @Setter
     private Boolean details;
 
     @Override

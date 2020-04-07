@@ -14,7 +14,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
@@ -44,12 +43,6 @@ class ServiceDeclarationControllerTests {
         ServiceDeclaration declarationTwo = TestUtil.getInstance().createDeclaration( "TestDeclaration2", "Test 2",
                 "Test description2", Boolean.TRUE, provider);
 
-        ListServiceDeclarationRequest request = new ListServiceDeclarationRequest();
-        request.setServiceProviderIdentifier(provider.getIdentifier());
-        request.setServiceDeclarationIdentifier(declarationOne.getIdentifier());
-        request.setValidAt(LocalDateTime.now());
-        request.setTechnicalDescription("Openapi 3.0.0");
-        request.setDetails(Boolean.TRUE);
         given(serviceDeclarationApiService.findDeclarations(any())).willReturn(Arrays.asList(declarationOne, declarationTwo));
 
         String bodyContent = ("{ \"serviceProviderIdentifier\": \"Test provider\", " +
@@ -137,18 +130,6 @@ class ServiceDeclarationControllerTests {
                 Boolean.TRUE,
                 provider);
         given(serviceDeclarationApiService.save(any())).willReturn(declaration);
-
-        AddServiceDeclarationRequest request = new AddServiceDeclarationRequest();
-        request.setServiceProviderIdentifier(provider.getIdentifier());
-        request.setServiceDeclarationName(declaration.getName());
-        request.setServiceDeclarationIdentifier(declaration.getIdentifier());
-        request.setServiceDeclarationDescription(declaration.getDescription());
-        request.setValidUntil(LocalDateTime.now());
-        request.setNeedSignature(Boolean.FALSE);
-        request.setMaxCacheSeconds(60L);
-        request.setConsentMaxDurationSeconds(60L);
-        request.setTechnicalDescription("Technical description");
-
 
         String bodyContent = ("{ \"serviceProviderIdentifier\": \"TestProvider\", " +
                 "\"serviceDeclarationIdentifier\": \"TestDeclaration\", " +
@@ -242,11 +223,6 @@ class ServiceDeclarationControllerTests {
                 Boolean.TRUE,
                 provider);
         given(serviceDeclarationApiService.update(any())).willReturn(declaration);
-
-        UpdateServiceDeclarationRequest request = new UpdateServiceDeclarationRequest();
-        request.setServiceProviderIdentifier(provider.getIdentifier());
-        request.setServiceDeclarationIdentifier(declaration.getIdentifier());
-        request.setValidUntil(LocalDateTime.now());
 
         String bodyContent = ("{ \"serviceProviderIdentifier\": \"TestProvider\", " +
                 "\"serviceDeclarationIdentifier\": \"TestDeclaration\", " +

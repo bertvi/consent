@@ -1,101 +1,44 @@
 package com.gofore.consent.service_declaration.model;
 
+import lombok.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode
 public class AddServiceDeclarationRequest implements Serializable {
 
     private static final long serialVersionUID = 4049961366368846345L;
 
+    @Getter @Setter
     private String serviceProviderIdentifier;
 
+    @Getter @Setter
     private String serviceDeclarationIdentifier;
 
+    @Getter @Setter
     private String serviceDeclarationName;
 
+    @Getter @Setter
     private String serviceDeclarationDescription;
 
+    @Getter @Setter
     private String technicalDescription;
 
+    @Getter @Setter
     private LocalDateTime validUntil;
 
+    @Getter @Setter
     private Long consentMaxDurationSeconds;
 
+    @Getter @Setter
     private Long maxCacheSeconds;
 
+    @Getter @Setter
     private Boolean needSignature;
-
-    public String getServiceProviderIdentifier() {
-        return serviceProviderIdentifier;
-    }
-
-    public void setServiceProviderIdentifier(String serviceProviderIdentifier) {
-        this.serviceProviderIdentifier = serviceProviderIdentifier;
-    }
-
-    public String getServiceDeclarationIdentifier() {
-        return serviceDeclarationIdentifier;
-    }
-
-    public void setServiceDeclarationIdentifier(String serviceDeclarationIdentifier) {
-        this.serviceDeclarationIdentifier = serviceDeclarationIdentifier;
-    }
-
-    public String getServiceDeclarationName() {
-        return serviceDeclarationName;
-    }
-
-    public void setServiceDeclarationName(String serviceDeclarationName) {
-        this.serviceDeclarationName = serviceDeclarationName;
-    }
-
-    public String getServiceDeclarationDescription() {
-        return serviceDeclarationDescription;
-    }
-
-    public void setServiceDeclarationDescription(String serviceDeclarationDescription) {
-        this.serviceDeclarationDescription = serviceDeclarationDescription;
-    }
-
-    public String getTechnicalDescription() {
-        return technicalDescription;
-    }
-
-    public void setTechnicalDescription(String technicalDescription) {
-        this.technicalDescription = technicalDescription;
-    }
-
-    public LocalDateTime getValidUntil() {
-        return validUntil;
-    }
-
-    public void setValidUntil(LocalDateTime validUntil) {
-        this.validUntil = validUntil;
-    }
-
-    public Long getConsentMaxDurationSeconds() {
-        return consentMaxDurationSeconds;
-    }
-
-    public void setConsentMaxDurationSeconds(Long consentMaxDurationSeconds) {
-        this.consentMaxDurationSeconds = consentMaxDurationSeconds;
-    }
-
-    public Long getMaxCacheSeconds() {
-        return maxCacheSeconds;
-    }
-
-    public void setMaxCacheSeconds(Long maxCacheSeconds) {
-        this.maxCacheSeconds = maxCacheSeconds;
-    }
-
-    public Boolean getNeedSignature() {
-        return needSignature;
-    }
-
-    public void setNeedSignature(Boolean needSignature) {
-        this.needSignature = needSignature;
-    }
 
     @Override
     public String toString() {

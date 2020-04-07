@@ -22,13 +22,18 @@ dependencies {
 	compile'io.springfox:springfox-swagger2:2.9.2'
 	compile 'org.springdoc:springdoc-openapi-ui:1.2.32'
 	compile 'ch.qos.logback:logback-classic:1.2.3'
-	compileOnly 'org.projectlombok:lombok:1.16.18'
+
+	compileOnly 'org.projectlombok:lombok:1.18.12'
+
+	annotationProcessor 'org.projectlombok:lombok:1.18.12'
+	testCompileOnly 'org.projectlombok:lombok:1.18.12'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.12'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module:'junit-vintage-engine'
 	}
 	testCompile 'junit:junit:4.12'
-	testCompileOnly 'org.projectlombok:lombok:1.16.18'
+
 }
 
 test {
