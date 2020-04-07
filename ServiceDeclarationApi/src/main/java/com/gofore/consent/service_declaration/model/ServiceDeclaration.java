@@ -11,32 +11,27 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter @Setter
 public class ServiceDeclaration implements Serializable {
 
     private static final long serialVersionUID = 4049961366368846485L;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
-    @Getter @Setter
-    @Column(nullable=false)
+    @Column(nullable=false, length = 40)
     private String identifier;
 
-    @Getter @Setter
-    @Column(nullable=false)
+    @Column(nullable=false, length = 100)
     private String name;
 
-    @Getter @Setter
     @Column(nullable=false)
     private String description;
 
-    @Getter @Setter
     @Column(nullable=false)
     private Boolean valid;
 
-    @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "service_provider_id")
     private ServiceProvider provider;

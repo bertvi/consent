@@ -8,10 +8,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter @Setter
 public class ServiceDeclarationResponse implements Serializable {
 
     private static final long serialVersionUID = 4049961376368846345L;
-    @Getter @Setter
+
     private String response;
 
     @Override

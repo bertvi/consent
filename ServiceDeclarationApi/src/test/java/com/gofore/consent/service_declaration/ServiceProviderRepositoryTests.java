@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.assertNotNull;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @Transactional

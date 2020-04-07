@@ -12,16 +12,15 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter @Setter
 public class ServiceProvider implements Serializable {
     private static final long serialVersionUID = 4048798961366546485L;
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Getter
     private Long id;
 
-    @Getter @Setter
-    @Column(nullable=false)
+    @Column(nullable=false, length = 100)
     private String identifier;
 
     @Override

@@ -9,29 +9,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter @Setter
 public class ListServiceDeclarationRequest implements Serializable {
 
     private static final long serialVersionUID = 4049961366358846345L;
 
-    @Getter @Setter
     private String serviceProviderIdentifier;
 
-    @Getter @Setter
     private String serviceDeclarationIdentifier;
 
-    @Getter @Setter
     private String name;
 
-    @Getter @Setter
     private String description;
 
-    @Getter @Setter
     private String technicalDescription;
 
-    @Getter @Setter
     private LocalDateTime validAt;
 
-    @Getter @Setter
     private Boolean details;
 
     @Override

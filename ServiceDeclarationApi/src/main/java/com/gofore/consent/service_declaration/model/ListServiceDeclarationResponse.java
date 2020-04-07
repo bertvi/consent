@@ -9,17 +9,15 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter @Setter
 public class ListServiceDeclarationResponse implements Serializable {
 
     private static final long serialVersionUID = 4049961576368846345L;
 
-    @Getter @Setter
     private List<ServiceDeclaration> declarations;
 
-    @Getter @Setter
     private String serviceProviderIdentifier;
 
-    @Getter @Setter
     private String serviceDeclarationIdentifier;
 
     @Override

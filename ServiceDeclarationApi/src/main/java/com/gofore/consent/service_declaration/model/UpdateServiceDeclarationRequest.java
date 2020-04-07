@@ -9,17 +9,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Getter @Setter
 public class UpdateServiceDeclarationRequest implements Serializable {
 
     private static final long serialVersionUID = 4049964376368846345L;
 
-    @Getter @Setter
     private String serviceProviderIdentifier;
 
-    @Getter @Setter
     private String serviceDeclarationIdentifier;
 
-    @Getter @Setter
     private LocalDateTime validUntil;
 
     @Override
