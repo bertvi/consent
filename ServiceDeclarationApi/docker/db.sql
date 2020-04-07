@@ -1,6 +1,8 @@
 CREATE DATABASE consent;
 GRANT ALL PRIVILEGES ON DATABASE consent TO declaration_api;
 
+\connect consent;
+
 CREATE SCHEMA service_declaration_api AUTHORIZATION declaration_api;
 
 CREATE TABLE service_declaration_api.service_provider
