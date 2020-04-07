@@ -1,6 +1,6 @@
-package com.gofore.consent.ServiceDeclaration.repository;
+package com.gofore.consent.service_declaration.repository;
 
-import com.gofore.consent.ServiceDeclaration.model.ServiceProvider;
+import com.gofore.consent.service_declaration.model.ServiceProvider;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

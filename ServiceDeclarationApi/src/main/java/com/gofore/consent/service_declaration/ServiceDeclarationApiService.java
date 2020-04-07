@@ -1,11 +1,11 @@
-package com.gofore.consent.ServiceDeclaration;
+package com.gofore.consent.service_declaration;
 
-import com.gofore.consent.ServiceDeclaration.exception.DuplicateDeclarationException;
-import com.gofore.consent.ServiceDeclaration.exception.InvalidRequestException;
-import com.gofore.consent.ServiceDeclaration.exception.TooBroadQueryException;
-import com.gofore.consent.ServiceDeclaration.model.*;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceDeclarationRepository;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceProviderRepository;
+import com.gofore.consent.service_declaration.exception.DuplicateDeclarationException;
+import com.gofore.consent.service_declaration.exception.InvalidRequestException;
+import com.gofore.consent.service_declaration.exception.TooBroadQueryException;
+import com.gofore.consent.service_declaration.model.*;
+import com.gofore.consent.service_declaration.repository.ServiceDeclarationRepository;
+import com.gofore.consent.service_declaration.repository.ServiceProviderRepository;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceDeclarationApiService {
@@ -26,8 +27,12 @@ public class ServiceDeclarationApiService {
     @Autowired
     private ServiceDeclarationRepository serviceDeclarationRepository;
 
-    public ServiceProvider findProviderByIdentifier(String identifier) {
-        return serviceProviderRepository.findByIdentifier(identifier);
+    public Optional<ServiceProvider> findProviderByIdentifier(String identifier) {
+        return Optional.ofNullable(serviceProviderRepository.findByIdentifier(identifier));
+    }
+
+    public Optional<ServiceDeclaration> findDeclarationByIdentifier(String identifier) {
+        return Optional.ofNullable(serviceDeclarationRepository.findByIdentifier(identifier));
     }
 
     public boolean checkDatabaseConnection() {
@@ -36,17 +41,8 @@ public class ServiceDeclarationApiService {
 
     public List<ServiceDeclaration> findDeclarations(ListServiceDeclarationRequest request) throws InvalidRequestException, TooBroadQueryException {
         List<ServiceDeclaration> declarations;
-        ServiceProvider provider;
 
         log.info("Attempting to find declarations with request {}", request.toString());
-
-        if (providerExists(request.getServiceProviderIdentifier())) {
-            provider = findProviderByIdentifier(request.getServiceProviderIdentifier());
-            declarations = serviceDeclarationRepository.findByProvider(provider);
-        } else {
-            log.error("The provider with identifier {} does not exist", request.getServiceProviderIdentifier());
-            throw new InvalidRequestException("The provider with identifier " + request.getServiceProviderIdentifier() + " does not exist");
-        }
 
         boolean tooBroadQuery = request.getDescription().isEmpty()
                 && request.getTechnicalDescription().isEmpty()
@@ -57,19 +53,17 @@ public class ServiceDeclarationApiService {
             throw new TooBroadQueryException("Consent Service refuses to fulfill the request/too many responses, please add more specific conditions and try again");
         }
 
+        Optional<ServiceProvider> foundProvider =findProviderByIdentifier(request.getServiceProviderIdentifier());
+        if (foundProvider.isPresent()) {
+            declarations = serviceDeclarationRepository.findByProvider(foundProvider.get());
+        } else {
+            log.error("The provider with identifier {} does not exist", request.getServiceProviderIdentifier());
+            throw new InvalidRequestException("The provider with identifier " + request.getServiceProviderIdentifier() + " does not exist");
+        }
+
         log.info("Found following declarations: {}", declarations.toString());
 
         return declarations;
-    }
-
-    public Boolean providerExists(String identifier) {
-        ServiceProvider provider = serviceProviderRepository.findByIdentifier(identifier);
-        return provider != null;
-    }
-
-    public Boolean declarationExists(String identifier) {
-        ServiceDeclaration declaration = serviceDeclarationRepository.findByIdentifier(identifier);
-        return declaration != null;
     }
 
     public ServiceDeclaration save(AddServiceDeclarationRequest request) throws DuplicateDeclarationException, InvalidRequestException {
@@ -77,22 +71,24 @@ public class ServiceDeclarationApiService {
 
         log.info("Attempting to save declaration with request {}", request.toString());
 
-        if (providerExists(request.getServiceProviderIdentifier())) {
-            provider = findProviderByIdentifier(request.getServiceProviderIdentifier());
-        } else {
+        Optional<ServiceProvider> foundProvider =findProviderByIdentifier(request.getServiceProviderIdentifier());
+        if (!foundProvider.isPresent()) {
             ServiceProvider newProvider = new ServiceProvider();
             newProvider.setIdentifier(request.getServiceProviderIdentifier());
             provider = serviceProviderRepository.save(newProvider);
+        } else {
+            provider = foundProvider.get();
         }
 
-        if (declarationExists(request.getServiceDeclarationIdentifier())) {
+        Optional<ServiceDeclaration> foundDeclaration = findDeclarationByIdentifier(request.getServiceDeclarationIdentifier());
+        if (foundDeclaration.isPresent()) {
             log.error("There already exists a declaration with identifier: {}", request.getServiceDeclarationIdentifier());
             throw new DuplicateDeclarationException("There already exists a declaration with identifier: " +
                     request.getServiceDeclarationIdentifier());
         }
 
         if (request.getValidUntil().isBefore(LocalDateTime.now())) {
-            log.error("The validUntil of this declaration request is in the past");
+            log.error("The validUntil of this declaration is in the past");
             throw new InvalidRequestException("The validUntil of this declaration request is in the past");
         }
 
@@ -116,12 +112,13 @@ public class ServiceDeclarationApiService {
     public ServiceDeclaration update(UpdateServiceDeclarationRequest request) throws InvalidRequestException {
         log.info("Attempting to update declaration with request {}", request.toString());
 
-        if (!declarationExists(request.getServiceDeclarationIdentifier())) {
+        Optional<ServiceDeclaration> foundDeclaration = findDeclarationByIdentifier(request.getServiceDeclarationIdentifier());
+        if (!foundDeclaration.isPresent()) {
             log.error("The declaration with identifier {} does not exist", request.getServiceDeclarationIdentifier());
             throw new InvalidRequestException("The declaration with identifier " + request.getServiceDeclarationIdentifier() + " does not exist");
         }
         if (request.getValidUntil().isBefore(LocalDateTime.now())) {
-            log.error("The validUntil of this declaration request is in the past");
+            log.error("The validUntil of this declaration is in the past");
             throw new InvalidRequestException("The validUntil of this declaration request is in the past");
         }
 

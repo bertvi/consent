@@ -1,4 +1,4 @@
-package com.gofore.consent.ServiceDeclaration.model;
+package com.gofore.consent.service_declaration.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

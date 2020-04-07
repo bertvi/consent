@@ -1,9 +1,9 @@
-package com.gofore.consent.ServiceDeclaration;
+package com.gofore.consent.service_declaration;
 
-import com.gofore.consent.ServiceDeclaration.model.ServiceDeclaration;
-import com.gofore.consent.ServiceDeclaration.model.ServiceProvider;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceDeclarationRepository;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceProviderRepository;
+import com.gofore.consent.service_declaration.model.ServiceDeclaration;
+import com.gofore.consent.service_declaration.model.ServiceProvider;
+import com.gofore.consent.service_declaration.repository.ServiceDeclarationRepository;
+import com.gofore.consent.service_declaration.repository.ServiceProviderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

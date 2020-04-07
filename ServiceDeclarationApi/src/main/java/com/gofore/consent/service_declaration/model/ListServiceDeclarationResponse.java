@@ -1,4 +1,4 @@
-package com.gofore.consent.ServiceDeclaration.model;
+package com.gofore.consent.service_declaration.model;
 
 import java.io.Serializable;
 import java.util.List;

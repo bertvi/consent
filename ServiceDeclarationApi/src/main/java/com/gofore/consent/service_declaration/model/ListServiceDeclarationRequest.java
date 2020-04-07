@@ -1,4 +1,4 @@
-package com.gofore.consent.ServiceDeclaration.model;
+package com.gofore.consent.service_declaration.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -81,7 +81,7 @@ public class ListServiceDeclarationRequest implements Serializable {
     @Override
     public String toString() {
         return "{\"serviceProviderIdentifier\":\"" + serviceProviderIdentifier
-                + "\",\"serviceDeclarationIdentfier\":\"" + serviceDeclarationIdentifier
+                + "\",\"serviceDeclarationIdentifier\":\"" + serviceDeclarationIdentifier
                 + "\",\"name\":\"" + name
                 + "\",\"description\":\"" + description
                 + "\",\"technicalDescription\":\"" + technicalDescription

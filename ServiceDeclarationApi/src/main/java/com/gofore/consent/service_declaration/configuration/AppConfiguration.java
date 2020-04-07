@@ -1,4 +1,4 @@
-package com.gofore.consent.ServiceDeclaration.configuration;
+package com.gofore.consent.service_declaration.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

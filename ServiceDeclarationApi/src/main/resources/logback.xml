@@ -22,7 +22,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.gofore.consent.ServiceDeclaration" level="TRACE" />
+    <logger name="com.gofore.consent.service_declaration" level="TRACE" />
 
     <root level="INFO">
         <appender-ref ref="STDOUT" />

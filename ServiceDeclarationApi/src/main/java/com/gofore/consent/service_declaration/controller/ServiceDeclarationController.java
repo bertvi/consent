@@ -1,7 +1,7 @@
-package com.gofore.consent.ServiceDeclaration.controller;
+package com.gofore.consent.service_declaration.controller;
 
-import com.gofore.consent.ServiceDeclaration.ServiceDeclarationApiService;
-import com.gofore.consent.ServiceDeclaration.model.*;
+import com.gofore.consent.service_declaration.ServiceDeclarationApiService;
+import com.gofore.consent.service_declaration.model.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(description = "Service declaration related services", value = "/api")
+@Api(value = "/api")
 @RestController
 @RequestMapping("/api")
 public class ServiceDeclarationController {
+
+    private static final String RESPONSE_OK = "OK";
 
     private static final String LIST_DECLARATIONS_EXAMPLE = ("{ \"serviceProviderIdentifier\": \"Test provider\", " +
             "\"serviceDeclarationIdentifier\": \"TestDeclaration\", " +
@@ -68,7 +70,7 @@ public class ServiceDeclarationController {
             @Valid @RequestBody AddServiceDeclarationRequest request) {
         serviceDeclarationApiService.save(request);
         ServiceDeclarationResponse response = new ServiceDeclarationResponse();
-        response.setResponse("OK");
+        response.setResponse(RESPONSE_OK);
         return ResponseEntity.ok(response.toString());
     }
 
@@ -83,7 +85,7 @@ public class ServiceDeclarationController {
             @Valid @RequestBody UpdateServiceDeclarationRequest request) {
         serviceDeclarationApiService.update(request);
         ServiceDeclarationResponse response = new ServiceDeclarationResponse();
-        response.setResponse("OK");
+        response.setResponse(RESPONSE_OK);
         return ResponseEntity.ok(response.toString());
     }
 

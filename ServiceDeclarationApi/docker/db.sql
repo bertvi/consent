@@ -5,18 +5,18 @@ CREATE SCHEMA service_declaration_api AUTHORIZATION declaration_api;
 
 CREATE TABLE service_declaration_api.service_provider
 (
-    id bigserial PRIMARY KEY NOT NULL,
-    identifier character varying(100)
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    identifier CHARACTER VARYING(100) NOT NULL
 );
 
 CREATE TABLE service_declaration_api.service_declaration
 (
-    id bigserial PRIMARY KEY NOT NULL,
-    identifier character varying(40),
-    name character varying(100),
-    description character varying(255),
-    valid boolean,
-    service_provider_id bigserial NOT NULL REFERENCES service_declaration_api.service_provider(id)
+    id BIGSERIAL PRIMARY KEY NOT NULL,
+    identifier CHARACTER VARYING(40) NOT NULL,
+    name CHARACTER VARYING(100),
+    description CHARACTER VARYING(255),
+    valid BOOLEAN NOT NULL,
+    service_provider_id BIGSERIAL NOT NULL REFERENCES service_declaration_api.service_provider(id)
 );
 
 CREATE SEQUENCE IF NOT EXISTS service_declaration_api.service_provider_id_seq
@@ -37,3 +37,6 @@ ALTER SEQUENCE service_declaration_api.service_declaration_id_seq OWNED BY servi
 
 CREATE INDEX idx_service_provider_identifier ON service_declaration_api.service_provider(identifier);
 CREATE INDEX idx_service_declaration_identifier ON service_declaration_api.service_declaration(identifier);
+CREATE INDEX idx_service_provider ON service_declaration_api.service_provider(id);
+CREATE INDEX idx_service_declaration ON service_declaration_api.service_declaration(id);
+CREATE INDEX idx_service_declaration_service_provider_id ON service_declaration_api.service_declaration(service_provider_id);

@@ -1,4 +1,4 @@
-package com.gofore.consent.ServiceDeclaration.exception;
+package com.gofore.consent.service_declaration.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

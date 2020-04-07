@@ -1,9 +1,9 @@
-package com.gofore.consent.ServiceDeclaration;
+package com.gofore.consent.service_declaration;
 
-import com.gofore.consent.ServiceDeclaration.exception.DuplicateDeclarationException;
-import com.gofore.consent.ServiceDeclaration.exception.InvalidRequestException;
-import com.gofore.consent.ServiceDeclaration.exception.TooBroadQueryException;
-import com.gofore.consent.ServiceDeclaration.model.*;
+import com.gofore.consent.service_declaration.exception.DuplicateDeclarationException;
+import com.gofore.consent.service_declaration.exception.InvalidRequestException;
+import com.gofore.consent.service_declaration.exception.TooBroadQueryException;
+import com.gofore.consent.service_declaration.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

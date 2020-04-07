@@ -1,7 +1,7 @@
-package com.gofore.consent.ServiceDeclaration;
+package com.gofore.consent.service_declaration;
 
-import com.gofore.consent.ServiceDeclaration.model.ServiceProvider;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceProviderRepository;
+import com.gofore.consent.service_declaration.model.ServiceProvider;
+import com.gofore.consent.service_declaration.repository.ServiceProviderRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

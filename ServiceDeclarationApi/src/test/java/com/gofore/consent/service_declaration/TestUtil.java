@@ -1,8 +1,8 @@
-package com.gofore.consent.ServiceDeclaration;
+package com.gofore.consent.service_declaration;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gofore.consent.ServiceDeclaration.model.*;
+import com.gofore.consent.service_declaration.model.*;
 import org.springframework.boot.json.JsonParseException;
 
 import java.io.IOException;

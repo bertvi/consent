@@ -1,11 +1,11 @@
-package com.gofore.consent.ServiceDeclaration;
+package com.gofore.consent.service_declaration;
 
-import com.gofore.consent.ServiceDeclaration.exception.DuplicateDeclarationException;
-import com.gofore.consent.ServiceDeclaration.exception.InvalidRequestException;
-import com.gofore.consent.ServiceDeclaration.exception.TooBroadQueryException;
-import com.gofore.consent.ServiceDeclaration.model.*;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceDeclarationRepository;
-import com.gofore.consent.ServiceDeclaration.repository.ServiceProviderRepository;
+import com.gofore.consent.service_declaration.exception.DuplicateDeclarationException;
+import com.gofore.consent.service_declaration.exception.InvalidRequestException;
+import com.gofore.consent.service_declaration.exception.TooBroadQueryException;
+import com.gofore.consent.service_declaration.model.*;
+import com.gofore.consent.service_declaration.repository.ServiceDeclarationRepository;
+import com.gofore.consent.service_declaration.repository.ServiceProviderRepository;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -38,54 +39,38 @@ class ServiceDeclarationApiServiceTests {
     public void testFindProviderByIdentifier() {
         ServiceProvider provider = TestUtil.getInstance().createProvider("TEST1");
         serviceProviderRepository.save(provider);
-        provider = serviceDeclarationApiService.findProviderByIdentifier("TEST1");
-        assertNotNull(provider);
+        Optional<ServiceProvider> foundProvider = serviceDeclarationApiService.findProviderByIdentifier("TEST1");
+        assertTrue(foundProvider.isPresent());
     }
 
     @Test
     public void testFindProviderByIdentifierNotFound() {
         ServiceProvider provider = TestUtil.getInstance().createProvider("TEST1");
         serviceProviderRepository.save(provider);
-        provider = serviceDeclarationApiService.findProviderByIdentifier("TEST2");
-        assertNull(provider);
+        Optional<ServiceProvider> foundProvider = serviceDeclarationApiService.findProviderByIdentifier("TEST2");
+        assertFalse(foundProvider.isPresent());
     }
 
     @Test
-    public void testProviderExists() {
-        ServiceProvider provider = TestUtil.getInstance().createProvider("TestProvider");
-        serviceProviderRepository.save(provider);
-        Boolean exists = serviceDeclarationApiService.providerExists("TestProvider");
-        Assert.assertTrue(exists);
-    }
-
-    @Test
-    public void testProviderExistsFalse() {
-        ServiceProvider provider = TestUtil.getInstance().createProvider("TestProvider");
-        serviceProviderRepository.save(provider);
-        Boolean exists = serviceDeclarationApiService.providerExists("TestProvider2");
-        Assert.assertFalse(exists);
-    }
-
-    @Test
-    public void testDeclarationExists() {
+    public void testFindDeclarationByIdentifier() {
         ServiceProvider provider = TestUtil.getInstance().createProvider("TestProvider");
         ServiceProvider savedProvider = serviceProviderRepository.save(provider);
         ServiceDeclaration declaration = TestUtil.getInstance().createDeclaration( "TestDeclaration", "Test 1",
                 "Test description", Boolean.TRUE, savedProvider);
         serviceDeclarationRepository.save(declaration);
-        Boolean exists = serviceDeclarationApiService.declarationExists("TestDeclaration");
-        Assert.assertTrue(exists);
+        Optional<ServiceDeclaration> foundDeclaration = serviceDeclarationApiService.findDeclarationByIdentifier("TestDeclaration");
+        Assert.assertTrue(foundDeclaration.isPresent());
     }
 
     @Test
-    public void testDeclarationExistsFalse() {
+    public void testFindDeclarationByIdentifierNotFound() {
         ServiceProvider provider = TestUtil.getInstance().createProvider("TestProvider");
         ServiceProvider savedProvider = serviceProviderRepository.save(provider);
         ServiceDeclaration declaration = TestUtil.getInstance().createDeclaration( "TestDeclaration", "Test 1",
                 "Test description", Boolean.TRUE, savedProvider);
         serviceDeclarationRepository.save(declaration);
-        Boolean exists = serviceDeclarationApiService.declarationExists("TestDeclaration2");
-        Assert.assertFalse(exists);
+        Optional<ServiceDeclaration> foundDeclaration = serviceDeclarationApiService.findDeclarationByIdentifier("TestDeclaration2");
+        Assert.assertFalse(foundDeclaration.isPresent());
     }
 
     @Test
@@ -144,12 +129,12 @@ class ServiceDeclarationApiServiceTests {
                 "Test name", "TestProvider1");
         serviceDeclarationApiService.save(request);
         ServiceDeclaration declarationBeforeUpdate = serviceDeclarationRepository.findByIdentifier("TestDeclaration1");
-        assertEquals(declarationBeforeUpdate.getValid(), Boolean.TRUE);
+        assertEquals(Boolean.TRUE, declarationBeforeUpdate.getValid());
         UpdateServiceDeclarationRequest updateRequest = TestUtil.getInstance().createUpdateServiceDeclarationRequest("TestDeclaration1",
                 "TestProvider1", LocalDateTime.of(2021, 1, 1, 0, 0, 0));
         serviceDeclarationApiService.update(updateRequest);
         ServiceDeclaration declarationAfterUpdate = serviceDeclarationRepository.findByIdentifier("TestDeclaration1");
-        assertEquals(declarationAfterUpdate.getValid(), Boolean.TRUE);
+        assertEquals(Boolean.TRUE, declarationAfterUpdate.getValid());
     }
 
     @Test
@@ -163,7 +148,7 @@ class ServiceDeclarationApiServiceTests {
                     "Test name", "TestProvider1");
             serviceDeclarationApiService.save(request);
             ServiceDeclaration declarationBeforeUpdate = serviceDeclarationRepository.findByIdentifier("TestDeclaration1");
-            assertEquals(declarationBeforeUpdate.getValid(), Boolean.TRUE);
+            assertEquals(Boolean.TRUE, declarationBeforeUpdate.getValid());
             UpdateServiceDeclarationRequest updateRequest = TestUtil.getInstance().createUpdateServiceDeclarationRequest("TestDeclaration1",
                     "TestProvider1", LocalDateTime.of(2020, 1, 1, 0, 0, 0));
             serviceDeclarationApiService.update(updateRequest);

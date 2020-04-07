@@ -1,4 +1,4 @@
-package com.gofore.consent.ServiceDeclaration.exception;
+package com.gofore.consent.service_declaration.exception;
 
 import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
