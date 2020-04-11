@@ -9,5 +9,5 @@ services:
     ports:
       - 15434:5432
     environment:
-      - POSTGRES_USER=declaration_api
-      - POSTGRES_PASSWORD=declaration_api
+      - POSTGRES_USER=service_declaration
+      - POSTGRES_PASSWORD=service_declaration

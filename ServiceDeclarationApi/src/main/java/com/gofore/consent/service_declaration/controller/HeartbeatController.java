@@ -1,23 +1,33 @@
 package com.gofore.consent.service_declaration.controller;
 
 import com.gofore.consent.service_declaration.ServiceDeclarationApiService;
-import org.springframework.stereotype.Controller;
+import com.gofore.consent.service_declaration.model.HeartbeatResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 @RequestMapping("/heartbeat")
-@Controller
+@RestController
 public class HeartbeatController {
   @Resource
   private ServiceDeclarationApiService systemService;
 
-  @GetMapping(path = "/heartbeat")
-  @ResponseBody
-  public String getHeartbeat() {
-    systemService.checkDatabaseConnection();
-    return "OK";
+  @Value("${application.name}")
+  private String appName;
+
+  @Value("${application.version}")
+  private String appVersion;
+
+  @GetMapping(path = "/heartbeat", produces = "application/json")
+  public HeartbeatResponse getHeartbeat() {
+    return HeartbeatResponse.builder()
+            .appName(appName)
+            .appVersion(appVersion)
+            .systemTime(LocalDateTime.now())
+            .databaseUp(Boolean.valueOf(systemService.checkDatabaseConnection())).build();
   }
 }
