@@ -53,7 +53,7 @@ public class ServiceDeclarationApiService {
             throw new TooBroadQueryException("Consent Service refuses to fulfill the request/too many responses, please add more specific conditions and try again");
         }
 
-        Optional<ServiceProvider> foundProvider =findProviderByIdentifier(request.getServiceProviderIdentifier());
+        Optional<ServiceProvider> foundProvider = findProviderByIdentifier(request.getServiceProviderIdentifier());
         if (foundProvider.isPresent()) {
             declarations = serviceDeclarationRepository.findByProvider(foundProvider.get());
         } else {

@@ -21,6 +21,7 @@ public class ServiceDeclarationController {
     @GetMapping(path = "/listServiceDeclarations", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> listServiceDeclarations(@Valid @RequestBody ListServiceDeclarationRequest request) {
         List<ServiceDeclaration> declarations = serviceDeclarationApiService.findDeclarations(request);
+
         ListServiceDeclarationResponse response = ListServiceDeclarationResponse.builder()
                 .serviceDeclarationIdentifier(request.getServiceDeclarationIdentifier())
                 .serviceProviderIdentifier(request.getServiceProviderIdentifier())
@@ -32,14 +33,18 @@ public class ServiceDeclarationController {
     @PostMapping(path = "/addServiceDeclaration", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> addServiceDeclaration(@Valid @RequestBody AddServiceDeclarationRequest request) {
         serviceDeclarationApiService.save(request);
+
         ServiceDeclarationResponse response = ServiceDeclarationResponse.builder().response(RESPONSE_OK).build();
+
         return ResponseEntity.ok(response.toString());
     }
 
     @PutMapping(path = "/updateServiceDeclarationValidUntil", consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> updateServiceDeclarationValidUntil(@Valid @RequestBody UpdateServiceDeclarationRequest request) {
         serviceDeclarationApiService.update(request);
+
         ServiceDeclarationResponse response = ServiceDeclarationResponse.builder().response(RESPONSE_OK).build();
+
         return ResponseEntity.ok(response.toString());
     }
 

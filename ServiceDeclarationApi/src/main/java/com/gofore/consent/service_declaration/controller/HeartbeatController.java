@@ -16,10 +16,10 @@ public class HeartbeatController {
   @Resource
   private ServiceDeclarationApiService systemService;
 
-  @Value("${application.name}")
+  @Value("${info.build.name}")
   private String appName;
 
-  @Value("${application.version}")
+  @Value("${info.build.version}")
   private String appVersion;
 
   @GetMapping(path = "/heartbeat", produces = "application/json")

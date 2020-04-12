@@ -6,6 +6,7 @@ import org.apache.tomcat.util.descriptor.web.SecurityCollection;
 import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
@@ -17,9 +18,16 @@ public class Application {
 
 	private static final Logger log = LoggerFactory.getLogger(Application.class);
 
+	@Value("${local.server.port}")
+	private static int localPort;
+
+	@Value("${server.port}")
+	private static int redirectedPort;
+
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
-		log.info("Service Declaration API started on port 8080");
+		log.info("Service Declaration API started on port {}}", localPort);
 	}
 
 	@Bean
@@ -35,15 +43,19 @@ public class Application {
 		}
 		};
 		tomcat.addAdditionalTomcatConnectors(redirectConnector());
+
+		log.info("Service Declaration API redirected to port {}}", redirectedPort);
+
 		return tomcat;
 	}
 
 	private Connector redirectConnector() {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		connector.setScheme("http");
-		connector.setPort(8080);
+		connector.setPort(localPort);
 		connector.setSecure(false);
-		connector.setRedirectPort(8443);
+		connector.setRedirectPort(redirectedPort);
+
 		return connector;
 	}
 
