@@ -39,7 +39,7 @@ public class ServiceDeclarationApiService {
         return Integer.valueOf(1).equals(serviceProviderRepository.checkConnection());
     }
 
-    public List<ServiceDeclaration> findDeclarations(ListServiceDeclarationRequest request) throws InvalidRequestException, TooBroadQueryException {
+    public List<ServiceDeclaration> findDeclarations(ListServiceDeclarationRequest request) {
         List<ServiceDeclaration> declarations;
 
         log.info("Attempting to find declarations with request {}", request);
@@ -66,7 +66,7 @@ public class ServiceDeclarationApiService {
         return declarations;
     }
 
-    public ServiceDeclaration save(AddServiceDeclarationRequest request) throws DuplicateDeclarationException, InvalidRequestException {
+    public ServiceDeclaration save(AddServiceDeclarationRequest request) {
         ServiceProvider provider;
 
         log.info("Attempting to save declaration with request {}", request);
@@ -108,7 +108,7 @@ public class ServiceDeclarationApiService {
         return serviceDeclarationRepository.save(declaration);
     }
 
-    public ServiceDeclaration update(UpdateServiceDeclarationRequest request) throws InvalidRequestException {
+    public ServiceDeclaration update(UpdateServiceDeclarationRequest request) {
         log.info("Attempting to update declaration with request {}", request);
 
         Optional<ServiceDeclaration> foundDeclaration = findDeclarationByIdentifier(request.getServiceDeclarationIdentifier());
