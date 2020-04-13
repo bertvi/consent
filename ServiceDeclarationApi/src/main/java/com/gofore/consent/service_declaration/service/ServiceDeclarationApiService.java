@@ -1,4 +1,4 @@
-package com.gofore.consent.service_declaration;
+package com.gofore.consent.service_declaration.service;
 
 import com.gofore.consent.service_declaration.exception.DuplicateDeclarationException;
 import com.gofore.consent.service_declaration.exception.InvalidRequestException;
@@ -7,19 +7,17 @@ import com.gofore.consent.service_declaration.model.*;
 import com.gofore.consent.service_declaration.repository.ServiceDeclarationRepository;
 import com.gofore.consent.service_declaration.repository.ServiceProviderRepository;
 
-import org.slf4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class ServiceDeclarationApiService {
-
-    private static final Logger log = LoggerFactory.getLogger(ServiceDeclarationApiService.class);
 
     @Autowired
     private ServiceProviderRepository serviceProviderRepository;
@@ -71,7 +69,7 @@ public class ServiceDeclarationApiService {
 
         log.info("Attempting to save declaration with request {}", request);
 
-        Optional<ServiceProvider> foundProvider =findProviderByIdentifier(request.getServiceProviderIdentifier());
+        Optional<ServiceProvider> foundProvider = findProviderByIdentifier(request.getServiceProviderIdentifier());
         if (!foundProvider.isPresent()) {
             ServiceProvider newProvider = ServiceProvider.builder().identifier(request.getServiceProviderIdentifier()).build();
             provider = serviceProviderRepository.save(newProvider);

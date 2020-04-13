@@ -1,24 +1,33 @@
 package com.gofore.consent.service_declaration;
 
+import com.gofore.consent.service_declaration.config.JwtAuthenticationEntryPoint;
+import com.gofore.consent.service_declaration.config.JwtTokenUtil;
+import com.gofore.consent.service_declaration.controller.ServiceDeclarationController;
 import com.gofore.consent.service_declaration.exception.DuplicateDeclarationException;
 import com.gofore.consent.service_declaration.exception.InvalidRequestException;
 import com.gofore.consent.service_declaration.exception.TooBroadQueryException;
 import com.gofore.consent.service_declaration.model.*;
+import com.gofore.consent.service_declaration.service.JwtUserDetailsService;
+import com.gofore.consent.service_declaration.service.ServiceDeclarationApiService;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
@@ -29,14 +38,43 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest
+@Slf4j
+@WebMvcTest(ServiceDeclarationController.class)
 class ServiceDeclarationControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
+    private JwtUserDetailsService jwtUserDetailsService;
+
+    @MockBean
+    private JwtTokenUtil jwtTokenUtil;
+
+    @MockBean
+    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
+    @MockBean
     private ServiceDeclarationApiService serviceDeclarationApiService;
+
+    @Value("${server.port}")
+    private int port;
+
+    private String token;
+
+    @Before
+    public void setup() {
+        RestAssured.port = 8082;
+        token = given()
+                .contentType(ContentType.JSON)
+                .body(JwtRequest.builder().username("consent").password("password").build())
+                .when().post("/api/auth")
+                .andReturn().jsonPath().getString("Jwt");
+        log.error("Got token:" + token);
+    }
+
+    @Autowired
+    private WebApplicationContext context;
 
     @ParameterizedTest
     @MethodSource("provideArgumentsForListDeclarations")
@@ -53,7 +91,8 @@ class ServiceDeclarationControllerTests {
         }
 
         String bodyContent = createBodyContentForListDeclarations(provider.getIdentifier(), declarations.get(0).getIdentifier());
-        MvcResult mvcResult = this.mockMvc.perform(get("/api/listServiceDeclarations")
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/listServiceDeclarations")
+                .header("Jwt", token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(bodyContent)).andReturn();
@@ -87,6 +126,7 @@ class ServiceDeclarationControllerTests {
 
         String bodyContent = createBodyContentForAddDeclarations(provider.getIdentifier(), declaration.getIdentifier());
         MvcResult mvcResult = this.mockMvc.perform(post("/api/addServiceDeclaration")
+                .header("Jwt", token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(bodyContent)).andReturn();
@@ -118,6 +158,7 @@ class ServiceDeclarationControllerTests {
 
         String bodyContent = createBodyContentForUpdateDeclaration(provider.getIdentifier(), declaration.getIdentifier());
         MvcResult mvcResult = this.mockMvc.perform(put("/api/updateServiceDeclarationValidUntil")
+                .header("Jwt", token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(bodyContent)).andReturn();

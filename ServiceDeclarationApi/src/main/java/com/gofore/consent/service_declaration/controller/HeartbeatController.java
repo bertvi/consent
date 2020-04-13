@@ -1,6 +1,6 @@
 package com.gofore.consent.service_declaration.controller;
 
-import com.gofore.consent.service_declaration.ServiceDeclarationApiService;
+import com.gofore.consent.service_declaration.service.ServiceDeclarationApiService;
 import com.gofore.consent.service_declaration.model.HeartbeatResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
-@RequestMapping("/heartbeat")
+@RequestMapping("/api")
 @RestController
 public class HeartbeatController {
   @Resource

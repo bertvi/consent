@@ -6,6 +6,7 @@ import com.gofore.consent.service_declaration.exception.TooBroadQueryException;
 import com.gofore.consent.service_declaration.model.*;
 import com.gofore.consent.service_declaration.repository.ServiceDeclarationRepository;
 import com.gofore.consent.service_declaration.repository.ServiceProviderRepository;
+import com.gofore.consent.service_declaration.service.ServiceDeclarationApiService;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

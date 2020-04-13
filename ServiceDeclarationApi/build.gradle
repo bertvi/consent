@@ -21,11 +21,16 @@ dependencies {
 	compile "org.springdoc:springdoc-openapi-ui:${springDocVersion}"
 	compile "ch.qos.logback:logback-classic:${logBackVersion}"
 	compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+	compile "io.jsonwebtoken:jjwt:${jsonWebTokenVersion}"
+	compile "org.springframework.security:spring-security-config:${springSecurityVersion}"
+	compile "org.springframework.security:spring-security-web:${springSecurityVersion}"
+	compile "org.springframework.security:spring-security-core:${springSecurityVersion}"
 	compileOnly "org.projectlombok:lombok:${lombokVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
 	implementation "org.springframework.boot:spring-boot-starter-web"
 	testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	testCompile "junit:junit:${jUnitVersion}"
+	testCompile "io.rest-assured:rest-assured:${restAssuredVersion}"
 	testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
 	testImplementation("org.springframework.boot:spring-boot-starter-test") {
 		exclude group: 'org.junit.vintage', module:'junit-vintage-engine'
