@@ -11,7 +11,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,7 +18,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
@@ -34,6 +35,7 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext
 class ServiceDeclarationControllerTests {
 
     @MockBean
@@ -45,16 +47,13 @@ class ServiceDeclarationControllerTests {
     @MockBean
     private ServiceDeclarationApiService serviceDeclarationApiService;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
-
     @LocalServerPort
     int randomServerPort;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    private static final String HOST = "http://localhost";
+    private static final String HOST = "https://localhost";
 
     private static final String AUTH_ENDPOINT = "/api/auth";
 
@@ -80,6 +79,8 @@ class ServiceDeclarationControllerTests {
                                      boolean mockJwt,
                                      Class exception) throws Exception {
 
+        TestRestTemplate testRestTemplate = new TestRestTemplate(TestRestTemplate.HttpClientOption.SSL);
+
         if (mockJwt) {
 
             if (willThrow) {
@@ -91,7 +92,7 @@ class ServiceDeclarationControllerTests {
             mockJwt();
             HttpHeaders headers = new HttpHeaders();
             headers.set(JWT_HEADER, JWT_TOKEN);
-            ResponseEntity<String> result = this.restTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + LIST_DECLARATIONS_ENDPOINT),
+            ResponseEntity<String> result = testRestTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + LIST_DECLARATIONS_ENDPOINT),
                     new HttpEntity<>(createListServiceDeclarationRequest(declarations.get(0).getIdentifier(),
                             provider.getIdentifier()), headers), String.class);
 
@@ -111,7 +112,7 @@ class ServiceDeclarationControllerTests {
 
             HttpHeaders headers = new HttpHeaders();
             headers.set(JWT_HEADER, JWT_TOKEN);
-            ResponseEntity<String> result = this.restTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + LIST_DECLARATIONS_ENDPOINT),
+            ResponseEntity<String> result = testRestTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + LIST_DECLARATIONS_ENDPOINT),
                     new HttpEntity<>(createListServiceDeclarationRequest(declarations.get(0).getIdentifier(),
                             provider.getIdentifier()), headers), String.class);
             assertEquals(expectedStatus, result.getStatusCodeValue());
@@ -129,6 +130,9 @@ class ServiceDeclarationControllerTests {
                                    boolean willThrow,
                                    boolean mockJwt,
                                    Class exception) throws Exception {
+
+        TestRestTemplate testRestTemplate = new TestRestTemplate(TestRestTemplate.HttpClientOption.SSL);
+
         if (mockJwt) {
 
             if (willThrow) {
@@ -140,7 +144,7 @@ class ServiceDeclarationControllerTests {
             mockJwt();
             HttpHeaders headers = new HttpHeaders();
             headers.set(JWT_HEADER, JWT_TOKEN);
-            ResponseEntity<String> result = this.restTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + ADD_DECLARATION_ENDPOINT),
+            ResponseEntity<String> result = testRestTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + ADD_DECLARATION_ENDPOINT),
                     new HttpEntity<>(createAddServiceDeclarationRequest(declaration.getIdentifier(),
                             provider.getIdentifier()), headers), String.class);
 
@@ -158,7 +162,7 @@ class ServiceDeclarationControllerTests {
 
             HttpHeaders headers = new HttpHeaders();
             headers.set(JWT_HEADER, JWT_TOKEN);
-            ResponseEntity<String> result = this.restTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + ADD_DECLARATION_ENDPOINT),
+            ResponseEntity<String> result = testRestTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + ADD_DECLARATION_ENDPOINT),
                     new HttpEntity<>(createAddServiceDeclarationRequest(declaration.getIdentifier(),
                             provider.getIdentifier()), headers), String.class);
             assertEquals(expectedStatus, result.getStatusCodeValue());
@@ -177,6 +181,8 @@ class ServiceDeclarationControllerTests {
                                                 boolean mockJwt,
                                                 Class exception) throws Exception {
 
+        TestRestTemplate testRestTemplate = new TestRestTemplate(TestRestTemplate.HttpClientOption.SSL);
+
         if (mockJwt) {
 
             if (willThrow) {
@@ -190,7 +196,7 @@ class ServiceDeclarationControllerTests {
             HttpEntity<UpdateServiceDeclarationRequest> entity = new HttpEntity<>(createUpdateServiceDeclarationRequest(declaration.getIdentifier(),
                     provider.getIdentifier()), headers);
             String url = HOST + ":" + randomServerPort + UPDATE_DECLARATION_ENDPOINT;
-            ResponseEntity<String> result = this.restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            ResponseEntity<String> result = testRestTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
 
             String content = result.getBody();
             if (willThrow) {
@@ -209,7 +215,7 @@ class ServiceDeclarationControllerTests {
             HttpEntity<UpdateServiceDeclarationRequest> entity = new HttpEntity<>(createUpdateServiceDeclarationRequest(declaration.getIdentifier(),
                     provider.getIdentifier()), headers);
             String url = HOST + ":" + randomServerPort + UPDATE_DECLARATION_ENDPOINT;
-            ResponseEntity<String> result = this.restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            ResponseEntity<String> result = testRestTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
             assertEquals(expectedStatus, result.getStatusCodeValue());
             verify(serviceDeclarationApiService, times(0)).update(any());
 
@@ -295,9 +301,10 @@ class ServiceDeclarationControllerTests {
         given(jwtTokenUtil.getUsernameFromToken(any())).willReturn(secret);
         given(jwtTokenUtil.validateToken(any(), any())).willReturn(true);
 
+        TestRestTemplate testRestTemplate = new TestRestTemplate(TestRestTemplate.HttpClientOption.SSL);
         HttpHeaders headers = new HttpHeaders();
         headers.set(JWT_HEADER, JWT_TOKEN);
-        this.restTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + AUTH_ENDPOINT),
+        testRestTemplate.postForEntity(new URI(HOST + ":" + randomServerPort + AUTH_ENDPOINT),
                 new HttpEntity<>(JwtRequest.builder().username(secret).password(PASSWORD).build(), headers), String.class);
     }
 
