@@ -39,8 +39,6 @@ public class Application {
 		};
 		tomcat.addAdditionalTomcatConnectors(redirectConnector());
 
-		//log.info("Service Declaration API redirected to port {}}");
-
 		return tomcat;
 	}
 
